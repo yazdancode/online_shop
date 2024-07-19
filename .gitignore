@@ -1,3 +1,6 @@
 .idea
 .venv
 .env
+templates
+*.pyc
+local_*.py
