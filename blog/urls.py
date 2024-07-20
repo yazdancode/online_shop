@@ -12,7 +12,6 @@ urlpatterns = [
     path("categories/list/", categories_list, name="categories_list"),
     path("archive/<fourdigit:year>/", post_list, name="archive_year"),
     path("archive/<int:year>/<int:month>/", post_list, name="archive_year_month"),
-    
     re_path(r"^detail/(?P<post_slug>[\w-]+)/$", post_detail, name="post_detail_re"),
     re_path(r"^archive/(?P<year>[0-9]{2,4})/$", post_list, name="archive_year_re"),
     re_path(r"^archive/(?P<code>[0-9]{4,6})/$", post_list, name="archive_code"),
