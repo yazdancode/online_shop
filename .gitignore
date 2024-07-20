@@ -5,3 +5,4 @@ templates
 *.pyc
 local_*.py
 db.sqlite3
+
