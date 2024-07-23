@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 
 class ProductType(models.Model):
@@ -10,6 +11,7 @@ class ProductType(models.Model):
     class Meta:
         verbose_name = "Product Type"
         verbose_name_plural = "Product Types"
+        ordering = ["title"]
 
     def __str__(self):
         return self.title
@@ -36,13 +38,14 @@ class ProductAttribute(models.Model):
     class Meta:
         verbose_name = "Product Attribute"
         verbose_name_plural = "Product Attributes"
+        ordering = ["title"]
 
     def __str__(self):
         return self.title
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, db_index=True)
     parent = models.ForeignKey(
         "self",
         on_delete=models.CASCADE,
@@ -54,13 +57,14 @@ class Category(models.Model):
     class Meta:
         verbose_name = "Category"
         verbose_name_plural = "Categories"
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
 
 
 class Brand(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, db_index=True)
     parent = models.ForeignKey(
         "self",
         on_delete=models.CASCADE,
@@ -72,6 +76,7 @@ class Brand(models.Model):
     class Meta:
         verbose_name = "Brand"
         verbose_name_plural = "Brands"
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -80,9 +85,10 @@ class Brand(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=255)
     product_type = models.ForeignKey(ProductType, on_delete=models.PROTECT)
-    upc = models.BigIntegerField(unique=True)
+    upc = models.BigIntegerField(unique=True, db_index=True)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
+    is_active = models.BooleanField(default=True)
     category = models.ForeignKey(
         Category, related_name="category_products", on_delete=models.CASCADE
     )
@@ -91,6 +97,7 @@ class Product(models.Model):
     class Meta:
         verbose_name = "Product"
         verbose_name_plural = "Products"
+        ordering = ["title"]
 
     def __str__(self):
         return self.title
@@ -108,6 +115,18 @@ class ProductAttributeValue(models.Model):
     class Meta:
         verbose_name = "Product Attribute Value"
         verbose_name_plural = "Product Attribute Values"
+        ordering = ["product", "attribute"]
+
+    def clean(self):
+        if self.attribute.attribute_type == ProductAttribute.INTEGER:
+            if not self.value.isdigit():
+                raise ValidationError("Value must be an integer.")
+        elif self.attribute.attribute_type == ProductAttribute.FLOAT:
+            try:
+                float(self.value)
+            except ValueError:
+                raise ValidationError("Value must be a float.")
+        # String validation is not needed as any value can be a string
 
     def __str__(self):
-        return f"{self.product}({self.attribute}): {self.value}"
+        return f"{self.product} ({self.attribute}): {self.value}"
