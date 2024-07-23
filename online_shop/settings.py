@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "blog.apps.BlogConfig",
     "catalogue.apps.CatalogueConfig",
+    "transaction.apps.TransactionConfig",
 ]
 
 MIDDLEWARE = [
