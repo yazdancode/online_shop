@@ -92,6 +92,9 @@ class Product(models.Model):
     category = models.ForeignKey(
         Category, related_name="category_products", on_delete=models.CASCADE
     )
+    # category_id = models.ForeignKey(
+    #     Category, related_name="category_products", on_delete=models.CASCADE
+    # )
     brand = models.ForeignKey(Brand, related_name="products", on_delete=models.CASCADE)
 
     class Meta:
