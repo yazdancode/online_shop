@@ -5,4 +5,4 @@ templates
 *.pyc
 local_*.py
 *.sqlite3
-
+.venv
