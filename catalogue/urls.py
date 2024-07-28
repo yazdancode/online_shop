@@ -4,6 +4,7 @@ from catalogue.views import (
     product_detail,
     category_products,
     product_search,
+    user_profile,
 )
 
 urlpatterns = [
@@ -11,4 +12,5 @@ urlpatterns = [
     path("product/search/", product_search, name="product-search"),
     path("product/detail/<int:pk>/", product_detail, name="product-detail"),
     path("category/<int:pk>/products/", category_products, name="category-products"),
+    path("profile/", user_profile, name="user-profile"),
 ]
