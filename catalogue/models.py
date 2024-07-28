@@ -2,6 +2,22 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 
+class IsActiveManager(models.Manager):
+    def get_queryset(self, *args, **kwargs) -> models.QuerySet:
+        return super().get_queryset(*args, **kwargs).select_related("category", "brand")
+
+    def actives(self, *args, **kwargs):
+        return self.get_queryset(*args, **kwargs).filter(is_active=True)
+
+    def deactives(self, *args, **kwargs):
+        return self.get_queryset(*args, **kwargs).exclude(is_active=True)
+
+
+class IsActiveCategoryManager(models.Manager):
+    def get_queryset(self, *args, **kwargs) -> models.QuerySet:
+        return super().get_queryset(*args, **kwargs).filter(category__is_active=True)
+
+
 class ProductType(models.Model):
     title = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
@@ -27,6 +43,7 @@ class ProductAttribute(models.Model):
         (STRING, "String"),
         (FLOAT, "Float"),
     )
+
     title = models.CharField(max_length=255)
     product_type = models.ForeignKey(
         ProductType, on_delete=models.CASCADE, related_name="attributes"
@@ -46,7 +63,6 @@ class ProductAttribute(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=255, db_index=True)
-    is_active = models.BooleanField(default=True)
     parent = models.ForeignKey(
         "self",
         on_delete=models.CASCADE,
@@ -95,6 +111,10 @@ class Product(models.Model):
     )
     brand = models.ForeignKey(Brand, related_name="products", on_delete=models.CASCADE)
 
+    default_manager = models.Manager()
+    objects = IsActiveManager()
+    is_active_category_manager = IsActiveCategoryManager()
+
     class Meta:
         verbose_name = "Product"
         verbose_name_plural = "Products"
@@ -131,7 +151,10 @@ class ProductAttributeValue(models.Model):
                 float(self.value)
             except ValueError:
                 raise ValidationError("Value must be a float.")
-        # String validation is not needed as any value can be a string
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.product} ({self.attribute}): {self.value}"
