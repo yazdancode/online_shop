@@ -15,6 +15,7 @@ INSTALLED_APPS = [
     "blog.apps.BlogConfig",
     "catalogue.apps.CatalogueConfig",
     "transaction.apps.TransactionConfig",
+    "partner.apps.PartnerConfig",
 ]
 
 MIDDLEWARE = [

@@ -32,3 +32,22 @@ def category_products(request, pk):
     products = Product.objects.filter(id__in=product_ids)
     context = "\n".join([f"{product.title}, {product.upc}" for product in products])
     return HttpResponse(context)
+
+
+def product_search(request):
+    title = request.GET.get("q")
+    products = Product.objects.filter(
+        is_active=True,
+        title__icontains=title,
+        category__name__icontains=title,
+        category__is_active=True,
+    )
+    products = (
+        Product.objects.filter(is_active=True)
+        .filter(title__icontains=title)
+        .filter(category__name__icontains=title)
+        .distinct()
+        .filter(category__is_active=True)
+    )
+    context = "\n".join([f"{product.title}, {product.upc}" for product in products])
+    return HttpResponse(f"Search pages:\n{context}")

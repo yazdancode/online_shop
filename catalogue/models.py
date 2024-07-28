@@ -46,6 +46,7 @@ class ProductAttribute(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=255, db_index=True)
+    is_active = models.BooleanField(default=True)
     parent = models.ForeignKey(
         "self",
         on_delete=models.CASCADE,
@@ -92,9 +93,6 @@ class Product(models.Model):
     category = models.ForeignKey(
         Category, related_name="category_products", on_delete=models.CASCADE
     )
-    # category_id = models.ForeignKey(
-    #     Category, related_name="category_products", on_delete=models.CASCADE
-    # )
     brand = models.ForeignKey(Brand, related_name="products", on_delete=models.CASCADE)
 
     class Meta:
@@ -104,6 +102,10 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def stock(self):
+        return self.partners.all().order_by("price").first()
 
 
 class ProductAttributeValue(models.Model):
