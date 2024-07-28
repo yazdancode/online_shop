@@ -37,14 +37,7 @@ def category_products(request, pk):
 def product_search(request):
     title = request.GET.get("q")
     products = Product.objects.actives(
-        title__icontains=title,
-        category__name__icontains=title,
+        title__icontains=title, category__name__icontains=title
     )
-    # products = (
-    #     Product.objects.filter(is_active=True)
-    #     .filter(title__icontains=title)
-    #     .filter(category__name__icontains=title)
-    #     .distinct()
-    #     .filter(category__is_active=True)
     context = "\n".join([f"{product.title}, {product.upc}" for product in products])
     return HttpResponse(f"Search pages:\n{context}")
