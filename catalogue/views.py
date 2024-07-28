@@ -46,6 +46,5 @@ def product_search(request):
     #     .filter(category__name__icontains=title)
     #     .distinct()
     #     .filter(category__is_active=True)
-    )
     context = "\n".join([f"{product.title}, {product.upc}" for product in products])
     return HttpResponse(f"Search pages:\n{context}")
