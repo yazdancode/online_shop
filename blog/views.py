@@ -6,7 +6,7 @@ def post_list(request, year=None, month=None):
         return HttpResponse(f"Post list archive for {year} and {month}")
     if year is not None:
         return HttpResponse(f"Post list archive for {year}")
-    return HttpResponse("Post List page")
+    return HttpResponse("<h1>H1 tag</h1><br><h2>H2 tag</h2>")
 
 
 def categories_list(request):
