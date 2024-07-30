@@ -21,7 +21,9 @@ def product_detail(request, pk):
     product = Product.objects.filter(is_active=True).filter(Q(pk=pk) | Q(upc=pk))
     if product.exists():
         product = product.first()
-        return render(request, 'catalogue/product_detail.html', context={"product": product})
+        return render(
+            request, "catalogue/product_detail.html", context={"product": product}
+        )
     raise Http404
 
 

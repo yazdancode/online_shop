@@ -5,9 +5,9 @@ from partner.models import PartnerStock, Partner
 
 @register(PartnerStock)
 class PartnerStockAdmin(admin.ModelAdmin):
-	pass
+    pass
 
 
 @register(Partner)
 class PartnerAdmin(admin.ModelAdmin):
-	pass
+    pass
