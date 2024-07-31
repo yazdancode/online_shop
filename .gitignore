@@ -4,3 +4,4 @@
 *.pyc
 local_*.py
 *.sqlite3
+media

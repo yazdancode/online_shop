@@ -32,9 +32,7 @@ def category_products(request, pk):
         category = Category.objects.prefetch_related("products").get(pk=pk)
     except Category.DoesNotExist:
         return HttpResponse("Category does not exist")
-    # products = category.products.all()
-    product_ids = [1, 2, 3]
-    products = Product.objects.filter(id__in=product_ids)
+    products = category.products.all()
     context = "\n".join([f"{product.title}, {product.upc}" for product in products])
     return HttpResponse(context)
 
@@ -42,7 +40,7 @@ def category_products(request, pk):
 def product_search(request):
     title = request.GET.get("q")
     products = Product.objects.actives(
-        title__icontains=title, category__name__icontains=title
+        Q(title__icontains=title) | Q(category__name__icontains=title)
     )
     context = "\n".join([f"{product.title}, {product.upc}" for product in products])
     return HttpResponse(f"Search pages:\n{context}")

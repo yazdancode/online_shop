@@ -2,9 +2,12 @@
 
 {% block data %}
     <div class="product-details">
+        {% for pi in product.images.all %}
+            <img src="{{ pi.image.url }}" alt="picture">
+        {% endfor %}
         <h3>{{ product.title }}</h3>
-        <p>{{ product.description }}</p>
-        <h4>Price: ${{ product.stock.price }}</h4>
+        <p>{{ product.description|truncatewords:10 }}</p>
+        <h4>Price: ${{ product.stock.price|floatformat:2 }}</h4>
     </div>
 {% endblock %}
 

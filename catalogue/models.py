@@ -14,7 +14,7 @@ class IsActiveManager(models.Manager):
 
 
 class IsActiveCategoryManager(models.Manager):
-    def get_queryset(self, *args, **kwargs) -> models.QuerySet:
+    def get_queryset(self, *args, **kwargs):
         return super().get_queryset(*args, **kwargs).filter(category__is_active=True)
 
 
@@ -79,6 +79,11 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        from django.urls import reverse
+
+        return reverse("category-detail", args=[self.pk])
+
 
 class Brand(models.Model):
     name = models.CharField(max_length=255, db_index=True)
@@ -107,7 +112,7 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
     category = models.ForeignKey(
-        Category, related_name="category_products", on_delete=models.CASCADE
+        Category, related_name="products", on_delete=models.CASCADE
     )
     brand = models.ForeignKey(Brand, related_name="products", on_delete=models.CASCADE)
 
@@ -126,6 +131,16 @@ class Product(models.Model):
     @property
     def stock(self):
         return self.partners.all().order_by("price").first()
+
+
+class ProductImage(models.Model):
+    image = models.ImageField(upload_to="products/")
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="images"
+    )
+
+    def __str__(self):
+        return str(self.product)
 
 
 class ProductAttributeValue(models.Model):
