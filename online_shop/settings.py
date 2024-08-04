@@ -17,6 +17,8 @@ INSTALLED_APPS = [
     "catalogue.apps.CatalogueConfig",
     "transaction.apps.TransactionConfig",
     "partner.apps.PartnerConfig",
+    "basket.apps.BasketConfig",
+    "shipping.apps.ShippingConfig",
 ]
 
 MIDDLEWARE = [

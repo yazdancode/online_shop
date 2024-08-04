@@ -7,6 +7,8 @@ from django.shortcuts import render
 from django.views.decorators.http import require_http_methods, require_POST
 from django.db.models import Q
 from django.http import HttpResponse, Http404
+
+from basket.forms import AddToBasketForm
 from catalogue.models import Product, Category
 from catalogue.utils import check_is_active
 
@@ -21,8 +23,11 @@ def product_detail(request, pk):
     product = Product.objects.filter(is_active=True).filter(Q(pk=pk) | Q(upc=pk))
     if product.exists():
         product = product.first()
+        form = AddToBasketForm({"product": product.id, "quantity": "1"})
         return render(
-            request, "catalogue/product_detail.html", context={"product": product}
+            request,
+            "catalogue/product_detail.html",
+            context={"product": product, "form": form},
         )
     raise Http404
 

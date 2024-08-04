@@ -1,0 +1,11 @@
+{%  extends 'base.html' %}
+{% block title %}Add new shipping{% endblock %}
+
+{% block content %}
+    <h3>Add new shipping address</h3>
+    <form method="POST"  action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Address</button>
+    </form>
+{% endblock %}

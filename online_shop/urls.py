@@ -7,5 +7,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("blog/", include("blog.urls")),
     path("catalogue/", include("catalogue.urls")),
-    # path("accounts/", include("django.contrib.auth.urls"))
+    path("basket/", include("basket.urls")),
+    path("shipping/", include("shipping.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
