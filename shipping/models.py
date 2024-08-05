@@ -13,3 +13,8 @@ class ShippingAddress(models.Model):
 
     def __str__(self):
         return str(self.user)
+
+    # def clean(self):
+    #     super().clean()
+    #     if not self.city.isalpha():
+    #         raise ValueError('The city must contain only alphabetic characters.')

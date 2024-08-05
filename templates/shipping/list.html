@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}User Addresses{% endblock %}
+
+{% block content %}
+    <h1>Your Addresses</h1>
+    <ul>
+        {% for address in addresses %}
+            <li>{{ address.zipcode }}{{ address.number }}-{{ address.city }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'address-create' %}">Add a new address</a>
+{% endblock %}

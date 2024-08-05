@@ -5,4 +5,4 @@ from shipping.models import ShippingAddress
 
 @register(ShippingAddress)
 class ShippingAddressAdmin(admin.ModelAdmin):
-    list_display = ["user", "city", "zipcode"]
+    list_display = ["user", "city", "zipcode", "created_time"]
