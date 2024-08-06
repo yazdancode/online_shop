@@ -1,4 +1,3 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -27,22 +26,8 @@ class AddressListView(CustomUserListView):
         return context
 
 
-@login_required
-@require_http_methods(["GET", "POST"])
-def address_create(request):
-    if request.method == "POST":
-        form = ShippingAddressForm(request.POST)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            # Ensure the address is linked to the current user
-            instance.user = request.user
-            instance.save()
-            return redirect("address-list")
-    else:
-        form = ShippingAddressForm()
-    return render(request, "shipping/create.html", {"form": form})
-
-
+@method_decorator(login_required, name="dispatch")
+@method_decorator(require_http_methods(["GET", "POST"]), name="dispatch")
 class AddressCreateView(FormView):
     form_class = ShippingAddressForm
     template_name = "shipping/create.html"
